@@ -253,4 +253,15 @@ spring.config.import: optional:classpath:openai.yml
 ## License
 자유롭게 사용 가능합니다.
 
-### PPT 발표자료 
+## 발표 자료
+- [PPT 다운로드](https://docs.google.com/presentation/d/1O1Uhgqkik3zDHVuossR1SH4L7NgAqtbo/edit?usp=sharing&ouid=112309789916009126624&rtpof=true&sd=true)
+- 발표 자료 안에는 트러블 슈팅 관련 내용 포함
+
+## 미리보기
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e435081f-d0a8-4c86-87c2-0ba3ca05450f" />
+<img width="1920" height="1079" alt="image" src="https://github.com/user-attachments/assets/1d57ec2b-add2-4454-b9e1-9dcf47de8a71" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/51c39e3c-0902-455c-9f5e-8fb039e5ba23" />
+
+
+## 팀 프로젝트(노션 정리)
+- [노션 방문하기](https://www.notion.so/GestureOSManager-2ecc2c49a2508074a3e8fdeb7b6fef63?source=copy_link)
