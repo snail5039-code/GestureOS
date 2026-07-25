@@ -6,6 +6,10 @@ function cn(...xs) {
   return xs.filter(Boolean).join(" ");
 }
 
+function hasNonAscii(text) {
+  return [...String(text ?? "")].some((char) => char.codePointAt(0) > 127);
+}
+
 function ModalShell({ open, onClose, children }) {
   if (!open) return null;
   return (
@@ -37,7 +41,7 @@ const api = axios.create({
 });
 
 export default function ProfileCard({ t, theme, onOpenTraining }) {
-  const { user, isAuthed, booting, loginWithCredentials, logout, refreshMe, profileBump } = useAuth();
+  const { user, isAuthed, booting, loginWithCredentials, logout, refreshMe } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
 
@@ -358,12 +362,12 @@ export default function ProfileCard({ t, theme, onOpenTraining }) {
                       className="h-full w-full object-cover"
                       onError={(e) => {
                         e.target.style.display = "none";
-                        e.target.parentElement.innerText = /[^\x00-\x7F]/.test(displayName)
+                        e.target.parentElement.innerText = hasNonAscii(displayName)
                           ? displayName.slice(0, 1)
                           : displayName.slice(0, 2).toUpperCase();
                       }}
                     />
-                  ) : /[^\x00-\x7F]/.test(displayName) ? (
+                  ) : hasNonAscii(displayName) ? (
                     displayName.slice(0, 1)
                   ) : (
                     displayName.slice(0, 2).toUpperCase()

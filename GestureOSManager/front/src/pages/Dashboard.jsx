@@ -396,7 +396,7 @@ export default function Dashboard({ onHudState, onHudActions, theme = "dark", on
   const pollTimerRef = useRef(null);
   const unmountedRef = useRef(false);
 
-  const [showRaw, setShowRaw] = useState(false);
+  const [showRaw] = useState(false);
 
   const [cameraPresent, setCameraPresent] = useState(null);
   const [modal, setModal] = useState({ open: false, title: "", message: "" });

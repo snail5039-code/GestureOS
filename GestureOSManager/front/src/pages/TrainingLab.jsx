@@ -357,8 +357,8 @@ export default function TrainingLab({ theme = "dark" }) {
     statusRef.current = status;
   }, [status]);
 
-  const cursorLm = status?.cursorLandmarks ?? [];
-  const otherLm = status?.otherLandmarks ?? [];
+  const cursorLm = useMemo(() => status?.cursorLandmarks ?? [], [status?.cursorLandmarks]);
+  const otherLm = useMemo(() => status?.otherLandmarks ?? [], [status?.otherLandmarks]);
 
   // ✅ 서버 learner 상태
   const learnEnabled = !!status?.learnEnabled;
@@ -367,9 +367,10 @@ export default function TrainingLab({ theme = "dark" }) {
   const learnLastTrainTs = status?.learnLastTrainTs || 0;
 
   const learnProfile = status?.learnProfile || "default";
-  const learnProfiles = Array.isArray(status?.learnProfiles)
-    ? status.learnProfiles
-    : ["default"];
+  const learnProfiles = useMemo(
+    () => (Array.isArray(status?.learnProfiles) ? status.learnProfiles : ["default"]),
+    [status?.learnProfiles],
+  );
 
   const learnHasBackup =
     typeof status?.learnHasBackup === "boolean" ? status.learnHasBackup : null;
@@ -414,6 +415,8 @@ export default function TrainingLab({ theme = "dark" }) {
   const stepApply = !!learnEnabled;
 
   const counts = useMemo(() => {
+    // datasetRef is mutable; datasetVersion intentionally invalidates this memo.
+    void datasetVersion;
     const out = {};
     for (const h of HANDS) {
       out[h.id] = {};
