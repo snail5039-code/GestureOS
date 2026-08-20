@@ -156,7 +156,7 @@
 - **웹(웹 매니저)**: React, Vite, Axios  
 - **백엔드(제어/웹)**: Java, Spring Boot, Spring Security(OAuth2/JWT), REST API, WebSocket, MyBatis  
 - **DB**: PostgreSQL(docker-compose)  
-- **에이전트(AI/제어)**: Python 3.10, MediaPipe Hands, OpenCV, NumPy, MLP, WinAPI(ctypes), SendInput  
+- **에이전트(AI/제어)**: Python 3.10~3.12, MediaPipe Hands, OpenCV, NumPy, MLP, WinAPI(ctypes), SendInput  
 - **AI API**: OpenAI Responses API, Embeddings(text-embedding-3-small)  
 - **모바일(확장)**: Android, Kotlin  
 - **배포/인프라(시도)**: Nginx, Linux VM(GCP), 방화벽/포트 설정, 도메인/DDNS  
@@ -203,7 +203,7 @@ GestureOSManagerWeb-master/
 
 **Java 17+**
 
-**Python 3.10+**
+**Python 3.10 ~ 3.12** (3.13은 mediapipe 0.10.21 휠이 없어 설치되지 않음)
 
 **PostgreSQL 16 (또는 docker-compose)**
 
