@@ -19,7 +19,7 @@
 - Node.js 20 이상
 - Java 17
 - Maven 3.9 이상 또는 정상 동작하는 Maven Wrapper
-- Python 3.10
+- Python 3.10 ~ 3.12 (3.13 미지원)
 - Docker Desktop 또는 PostgreSQL 16
 - 카메라
 

@@ -1,6 +1,6 @@
 # GestureOS 프로젝트 현황
 
-최종 점검일: 2026-07-25
+최종 점검일: 2026-08-20
 
 ## 구성
 
@@ -11,7 +11,27 @@
 - `GestureOSManagerWeb/backend-spring`: 8082 웹 API
 - `GestureOSManagerWeb/docker-compose.yml`: PostgreSQL 16
 
-## 이번 점검에서 수정한 내용
+## 2026-08-20 점검에서 수정한 내용
+
+- **마우스 모드가 첫 프레임에서 죽던 문제.** `hands_agent.py` 의 `run()` 이
+  `block_by_palette` 를 대입(1410줄)하기 전에 읽고 있었다(1400줄). 같은 함수 안에서
+  나중에 대입되는 이름이라 파이썬은 이를 지역변수로 잡고 `UnboundLocalError` 를 낸다.
+  조건이 `mode_u == "MOUSE" and self.enabled and (not self.ui_locked)` 다음이라
+  마우스 모드를 켜면 매 프레임 걸리는 자리였고, `run()` 을 감싸는 `except` 가 없어
+  (`main.py` 는 `try/finally` 만 둔다) 에이전트 프로세스가 그대로 종료됐다.
+  팔레트 모달 계산 블록을 핀치 고정 블록보다 앞으로 옮겨 해결했다.
+- **검사 목록에 `pyflakes` 를 넣었다.** `compileall` 은 구문만 본다. 위 오류도
+  구문 검사는 통과하고 있었다. 같은 것을 또 놓치지 않으려면 정적 검사가 필요하다.
+
+  ```powershell
+  py -3.10 -m pyflakes GestureOSManager\py
+  ```
+- **Electron 진입 파일이 lint 대상에서 빠져 있었다.** `front/eslint.config.js` 의
+  `files` 가 `**/*.{js,jsx}` 라서 `electron/main.cjs`·`electron/preload.cjs` 에는
+  규칙이 하나도 적용되지 않았다(적용 규칙 0개, `src/main.jsx` 는 79개).
+  `**/*.cjs` 를 CommonJS + Node 전역으로 따로 넣었다. 적용 후 lint 통과.
+
+## 2026-07-25 점검에서 수정한 내용
 
 - 웹 프런트의 `ProtectedRoute`에 누락된 React Router 및 인증 훅 import 추가
 - 두 프런트의 ESLint 설정을 실제 런타임 결함에 집중하도록 정리
@@ -33,7 +53,8 @@
 | 웹 React 프로덕션 빌드 | 통과 |
 | 8080 Spring 테스트 | 통과 |
 | 8082 Spring 테스트 | 통과 |
-| Python 전체 구문 검사 | 통과 |
+| Python 구문 검사 (compileall) | 통과 |
+| Python 정적 검사 (pyflakes) | 통과 |
 | MediaPipe/OpenCV/PySide6 핵심 import | 통과 |
 
 ## 환경 의존 항목
@@ -49,6 +70,14 @@
 
 ## 알려진 개선 항목
 
+- `react-hooks` 의 `immutability`·`purity`·`set-state-in-effect` 를 `off` 로 두고 있다.
+  다시 켜면 데스크톱 4건·웹 5건이 나온다. 대부분 오탐이지만
+  `set-state-in-effect` 3건(`PairingQrModal.jsx:62`, `ChatWidget.jsx:41`·`47`)은 확인이 필요하다
+- `electron/main.cjs` 의 `shell:openExternal` 핸들러가 URL 스킴을 검증하지 않는다.
+  `http`/`https` 로 제한하는 편이 안전하다
+- `electron/main.cjs` 는 항상 `localhost:5173` 을 로드한다. 패키징용 분기가 없어
+  설치본에서는 화면이 뜨지 않는다 (설치형 배포가 개선 과제로 남은 이유)
+- Spring 테스트는 두 모듈 모두 컨텍스트 로딩 1건뿐이다. 기능 검증이 아니다
 - 데스크톱 프로덕션 번들의 큰 청크를 화면별 동적 import로 분리
 - npm audit 경고를 호환성 검증과 함께 단계적으로 업데이트
 - 루트 `README.md`의 깨진 한글 인코딩을 UTF-8 문서로 교체
